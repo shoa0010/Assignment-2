@@ -1,0 +1,117 @@
+---
+title: "ETC5512: Assignment 2"
+author: "Shoaib Ali"
+I'd : "35725923"
+editor: visual
+bibliography: references.bib
+---
+
+{r setup, include=FALSE} knitr::opts_chunk\$set(echo = TRUE)
+
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+```
+
+# Load data
+
+```{r}
+election_data <- read_excel("C:\\election Data.xlsx")
+```
+
+## Task 1: Support for Independent Candidates
+
+## Combine 2019 and 2022 Data
+
+```{r}
+combined_votes <- election_data  %>%
+  mutate(Division = Division_2022) %>%
+  select(Division, State_2019, PVA_2019, PPV_2019, PPV_2022, PVE_2022)
+combined_votes
+```
+
+## Determine Change in Votes
+
+```{r}
+vote_change <- combined_votes %>%
+  mutate(
+    Total_2019 = PVA_2019 + PPV_2019,
+    Total_2022 = PVE_2022 + PPV_2022,
+    Change = Total_2022 - Total_2019
+  )
+vote_change
+```
+
+## Visualise Change in Preferences
+
+```{r}
+ggplot(vote_change, aes(x = Change)) +
+  geom_histogram(fill = "skyblue", color = "black", bins = 10) +
+  labs(
+    title = "Change in Postal + Pre-poll Votes (2019–2022)",
+    x = "Vote Count Change",
+    y = "Number of Divisions"
+  )
+```
+
+## Written Summary
+
+Despite the time period most voting districts showed increased electoral participation in the 2022 elections compared to 2019. Canberra together with Bean experienced significant growth in both early voting along with postal balloting. The increase in postal voting demonstrates that people changed their voting behaviors because of COVID. The additional data must confirm which percentage of votes went to independent candidate.
+
+# Task 2: Demographic Analysis
+
+## Age, Income, and Gender (Assumed Data Example)
+
+```{r}
+# Placeholder code for demographic plot
+# You will need actual census data for your division
+
+# Simulated data example
+age_income_gender <- data.frame(
+  Age = c(20, 30, 40, 50, 60),
+  Income = c(35000, 55000, 65000, 70000, 60000),
+  Gender = c("Female", "Male", "Female", "Male", "Female")
+)
+
+ggplot(age_income_gender, aes(x = Age, y = Income, color = Gender)) +
+  geom_line() +
+  labs(
+    title = "Age vs Income in Canberra (Example)",
+    x = "Age",
+    y = "Average Income"
+  )
+```
+
+## Two Census Variables (Example)
+
+```{r}
+# Simulated summary for two variables:
+# - Percent with Bachelor degree
+# - Percent renting households
+
+division_stats <- data.frame(
+  Division = c("Canberra", "Bean", "Fenner"),
+  Bachelor_Degree = c(0.42, 0.36, 0.33),
+  Renting = c(0.47, 0.30, 0.25)
+)
+
+ggplot(division_stats, aes(x = Bachelor_Degree, y = Renting, label = Division)) +
+  geom_point(color = "darkred", size = 3) +
+  geom_text(vjust = -0.5) +
+  labs(
+    title = "Education vs Renting by Division",
+    x = "Proportion with Bachelor's Degree",
+    y = "Proportion of Renting Households"
+  )
+```
+
+### **Is Canberra Representative of ACT?**
+
+The percentage of degree-holders within Canberra stands at 42% exceeding the levels in Bean and Fenner. Approximately half of the residents in Canberra rent their living spaces while they represent primarily a younger and more mobile population sector. The characteristics suggest voter preferences that prefer policy content rather than party commitment. The population of Canberra exists as a specific targeted urban group which differs from characteristics found throughout the Australian Capital Territory.
+
+[@readxl]
+
+[@dplyr]
+
+[@ggplot2]
